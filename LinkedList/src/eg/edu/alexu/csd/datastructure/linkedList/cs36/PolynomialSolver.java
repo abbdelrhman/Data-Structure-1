@@ -4,17 +4,20 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class PolynomialSolver implements IPolynomialSolver {
+    private static Scanner scanner = new Scanner(System.in);
     private DoubleLinkedList A = new DoubleLinkedList();
     private DoubleLinkedList B = new DoubleLinkedList();
     private DoubleLinkedList C = new DoubleLinkedList();
     private DoubleLinkedList R = new DoubleLinkedList();
     private String ans;
 
+
     @Override
     public void setPolynomial(char poly, int[][] terms) {
-        ArrayList<Point> arr =new ArrayList<>();
+        ArrayList<Point> arr = new ArrayList<>();
         for (int i = 0; i < terms.length; i++) {
             if (terms[i] == null) {
 
@@ -40,7 +43,6 @@ public class PolynomialSolver implements IPolynomialSolver {
             }
         }
     }
-
 
 
     @Override
@@ -170,6 +172,10 @@ public class PolynomialSolver implements IPolynomialSolver {
     public int[][] add(char poly1, char poly2) {
         DoubleLinkedList list1 = getPoly(poly1);
         DoubleLinkedList list2 = getPoly(poly2);
+        if(list1 == null || list2 ==null){
+            System.out.println("variable not set");
+            return null;
+        }
         if (list1.size() == 0 && list2.size() == 0) {
             throw new RuntimeException("empty polynomial");
         }
@@ -232,14 +238,14 @@ public class PolynomialSolver implements IPolynomialSolver {
         for (int index = pointCounter; index < ansLength; index++) {
             ans[index] = null;
         }
-    //    System.out.println("in the add function");
+        //    System.out.println("in the add function");
         ans = sortPoints(ans);
         int answer[][] = new int[ans.length][2];
         for (int I = 0; I < ans.length; I++) {
             answer[I][0] = ans[I].x;
             answer[I][1] = ans[I].y;
         }
-        setPolynomial('R',answer);
+        setPolynomial('R', answer);
         return answer;
     }
 
@@ -256,11 +262,11 @@ public class PolynomialSolver implements IPolynomialSolver {
         arr1 = sortPoints(arr1);
         arr2 = sortPoints(arr2);
 
-        for(int i = 0 ; i< arr2.length ; i++){
-            if(arr2[i] == null){
+        for (int i = 0; i < arr2.length; i++) {
+            if (arr2[i] == null) {
 
-            }else {
-                arr2[i].x = -1 * arr2[i].x ;
+            } else {
+                arr2[i].x = -1 * arr2[i].x;
             }
         }
         int ansLength = arr1.length > arr2.length ? arr1.length : arr2.length;
@@ -317,14 +323,14 @@ public class PolynomialSolver implements IPolynomialSolver {
         for (int index = pointCounter; index < ansLength; index++) {
             ans[index] = null;
         }
-     //   System.out.println("in the sub function");
+        //   System.out.println("in the sub function");
         ans = sortPoints(ans);
         int answer[][] = new int[ans.length][2];
         for (int I = 0; I < ans.length; I++) {
             answer[I][0] = ans[I].x;
             answer[I][1] = ans[I].y;
         }
-        setPolynomial('R',answer);
+        setPolynomial('R', answer);
         return answer;
     }
 
@@ -341,22 +347,22 @@ public class PolynomialSolver implements IPolynomialSolver {
         arr1 = sortPoints(arr1);
         arr2 = sortPoints(arr2);
         ArrayList<Point> arrayList = new ArrayList<>();
-        int i=0 ;
-        while (i<arr1.length){
-            for(int j=0 ;  j<arr2.length ; j++){
-                Point point = new Point(arr1[i].x * arr2[j].x , arr1[i].y+arr2[j].y);
+        int i = 0;
+        while (i < arr1.length) {
+            for (int j = 0; j < arr2.length; j++) {
+                Point point = new Point(arr1[i].x * arr2[j].x, arr1[i].y + arr2[j].y);
                 arrayList.add(point);
             }
             i++;
         }
         Point[] ans = translateListIntoArray(arrayList);
-        ans =sortPoints(ans);
+        ans = sortPoints(ans);
         int answer[][] = new int[ans.length][2];
         for (int I = 0; I < ans.length; I++) {
             answer[I][0] = ans[I].x;
             answer[I][1] = ans[I].y;
         }
-        setPolynomial('R',answer);
+        setPolynomial('R', answer);
         return answer;
     }
 
@@ -379,6 +385,7 @@ public class PolynomialSolver implements IPolynomialSolver {
     public String getAns() {
         return ans;
     }
+
     public Point[] translateListIntoArrOfPoints(DoubleLinkedList list) {
         Point arr[] = new Point[list.size()];
         DNode temp = list.getHead();
@@ -436,7 +443,7 @@ public class PolynomialSolver implements IPolynomialSolver {
             arr[i] = temp[i];
         }
         temp = arrayWithoutNull(temp);
-    //     System.out.println("temp in sort points function" + Arrays.toString(temp));
+        //     System.out.println("temp in sort points function" + Arrays.toString(temp));
         return temp;
     }
 
@@ -455,26 +462,29 @@ public class PolynomialSolver implements IPolynomialSolver {
                 throw new RuntimeException();
         }
     }
-    public int sizeWithoutNull (Point [] arr){
+
+    public int sizeWithoutNull(Point[] arr) {
         int size = 0;
-        for(int i=0 ; i< arr.length ; i++){
-            if(arr[i]!= null){
-                size ++ ;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != null) {
+                size++;
             }
         }
-        return size ;
+        return size;
     }
-    public Point [] arrayWithoutNull (Point arr []){
-        Point ans [] = new Point[sizeWithoutNull(arr)];
-        for(int i=0 ; i<ans.length ;i++){
+
+    public Point[] arrayWithoutNull(Point arr[]) {
+        Point ans[] = new Point[sizeWithoutNull(arr)];
+        for (int i = 0; i < ans.length; i++) {
             ans[i] = arr[i];
         }
         return ans;
     }
-    public Point [] translateListIntoArray(ArrayList<Point> arrayList){
-        Point arr [] = new Point[arrayList.size()];
-        for(int i=0 ; i<arr.length ; i++){
-            arr[i]=arrayList.get(i);
+
+    public Point[] translateListIntoArray(ArrayList<Point> arrayList) {
+        Point arr[] = new Point[arrayList.size()];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = arrayList.get(i);
         }
         return arr;
     }
